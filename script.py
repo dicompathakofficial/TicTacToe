@@ -2,7 +2,8 @@
 # Diagonal checks from left and right side are left [DONE]
 # Making the initial move is left [DONE]
 # Actions when no condition is met is left [DONE]
-# User input feature is left
+# User input feature is left [DONE]
+# Game over is not done yet along with making computer wanna win
 # Convert the code to pycharm
 
 import random
@@ -24,6 +25,15 @@ class GameFunctions:
         return count
 
     @staticmethod
+    def box_count(lst):
+        count = 0
+        for num in range(len(lst)):
+            for num_inner in range(len(lst)):
+                if lst[num][num_inner] != 0:
+                    count += 1
+        return count
+
+    @staticmethod
     def initial_move(lst):
         random_vertical_row = random.randint(0, 2)
         random_horizontal_row = random.randint(0, 2)
@@ -37,7 +47,7 @@ class GameFunctions:
             for inner_index in range(len(lst[0])):
                 if lst[index][inner_index] != 1 and lst[index][inner_index] != 2:
                     lst[index][inner_index] = 2
-                    break
+                    return
 
     @staticmethod
     def horizontal_check(lst):
@@ -88,19 +98,34 @@ class GameFunctions:
 
 
 grid = [
-    [1, 2, 1],
-    [1, 1, 2],
-    [2, 2, 2]
+    [1, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]
 ]
-
+GameFunctions.initial_move(grid)
 GameFunctions.view_grid(grid)
 
 print("-------------------------")
 
-#GameFunctions.initial_move(grid)
-GameFunctions.random_move(grid)
+while True:  # currently an infinite loop / only loops out when game is over
+    u_grid = int(input("Grid??"))
+    u_index = int(input("Index??"))
+    if grid[u_grid][u_index] == 0:
+        grid[u_grid][u_index] = 1
+    else:
+        print("Not Valid")
 
-GameFunctions.view_grid(grid)
+    count = GameFunctions.box_count(grid)
 
+    GameFunctions.horizontal_check(grid)
 
+    if GameFunctions.box_count(grid) == count:
+        GameFunctions.vertical_check(grid)
+    if GameFunctions.box_count(grid) == count:
+        GameFunctions.diagonal_check_left(grid)
+    if GameFunctions.box_count(grid) == count:
+        GameFunctions.diagonal_check_right(grid)
+    if GameFunctions.box_count(grid) == count:
+        GameFunctions.random_move(grid)
 
+    GameFunctions.view_grid(grid)
