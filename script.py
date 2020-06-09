@@ -50,45 +50,47 @@ class GameFunctions:
                     return
 
     @staticmethod
-    def horizontal_check(lst):
+    def horizontal_check(lst, player, computer):
         for item in range(len(lst)):
-            if GameFunctions.count(lst[item], 1) == 2 and GameFunctions.count(lst[item], 2) == 0:
+            if GameFunctions.count(lst[item], player) == 2 and GameFunctions.count(lst[item], computer) == 0:
                 for num in range(len(lst[item])):
                     if lst[item][num] != 1:
                         lst[item][num] = 2
                 break  # stops the function once it finds a line that meets the condition
 
     @staticmethod
-    def vertical_check(lst):
+    def vertical_check(lst, player, computer):
         for i in range(len(lst[0])):
             vertical_lst = []
             for num in range(len(lst)):
                 vertical_lst.append(lst[num][i])
-            if GameFunctions.count(vertical_lst, 1) == 2 and GameFunctions.count(vertical_lst, 2) == 0:
+            if GameFunctions.count(vertical_lst, player) == 2 and GameFunctions.count(vertical_lst, computer) == 0:
                 for n in range(len(lst)):
                     if lst[n][i] != 1:
                         lst[n][i] = 2
                 break
 
     @staticmethod
-    def diagonal_check_left(lst):
+    def diagonal_check_left(lst, player, computer):
         diagonal_lst_left = []
         for num in range(len(lst)):
             diagonal_lst_left.append(lst[num][num])
-        if GameFunctions.count(diagonal_lst_left, 1) == 2 and GameFunctions.count(diagonal_lst_left, 2) == 0:
+        if GameFunctions.count(diagonal_lst_left, player) == 2 and GameFunctions.count(diagonal_lst_left,
+                                                                                       computer) == 0:
             for n in range(len(lst)):
                 if lst[n][n] != 1:
                     lst[n][n] = 2
 
     @staticmethod
-    def diagonal_check_right(lst):
+    def diagonal_check_right(lst, player, computer):
         diagonal_lst_right = []
         count = len(lst) - 1
         while count >= 0:
             for num in range(len(lst[0])):
                 diagonal_lst_right.append(lst[count][num])
                 count -= 1
-        if GameFunctions.count(diagonal_lst_right, 1) == 2 and GameFunctions.count(diagonal_lst_right, 2) == 0:
+        if GameFunctions.count(diagonal_lst_right, player) == 2 and GameFunctions.count(diagonal_lst_right,
+                                                                                        computer) == 0:
             new_count = len(lst) - 1
             while new_count >= 0:
                 for n in range(len(lst[0])):
@@ -96,9 +98,39 @@ class GameFunctions:
                         lst[new_count][n] = 2
                     new_count -= 1
 
+    @staticmethod
+    def win_check(lst, player):
+        for item in range(len(lst)):
+            if GameFunctions.count(lst[item], player) == 3:
+                return True
+
+        for i in range(len(lst[0])):
+            vertical_lst = []
+            for num in range(len(lst)):
+                vertical_lst.append(lst[num][i])
+            if GameFunctions.count(vertical_lst, player) == 3:
+                return True
+
+        diagonal_lst_left = []
+        for num in range(len(lst)):
+            diagonal_lst_left.append(lst[num][num])
+        if GameFunctions.count(diagonal_lst_left, player) == 3:
+            return True
+
+        diagonal_lst_right = []
+        counting = len(lst) - 1
+        while counting >= 0:
+            for num in range(len(lst[0])):
+                diagonal_lst_right.append(lst[counting][num])
+                counting -= 1
+        if GameFunctions.count(diagonal_lst_right, player) == 3:
+            return True
+
+
+
 
 grid = [
-    [1, 0, 0],
+    [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0]
 ]
@@ -113,19 +145,42 @@ while True:  # currently an infinite loop / only loops out when game is over
     if grid[u_grid][u_index] == 0:
         grid[u_grid][u_index] = 1
     else:
-        print("Not Valid")
-
+        print("Not Valid")  # re asking for input if input not valid is not proper
     count = GameFunctions.box_count(grid)
 
-    GameFunctions.horizontal_check(grid)
+    if GameFunctions.box_count(grid) == count:
+        GameFunctions.horizontal_check(grid, 2, 1)
+    if GameFunctions.box_count(grid) == count:
+        GameFunctions.vertical_check(grid, 2, 1)
+    if GameFunctions.box_count(grid) == count:
+        GameFunctions.diagonal_check_left(grid, 2, 1)
+    if GameFunctions.box_count(grid) == count:
+        GameFunctions.diagonal_check_right(grid, 2, 1)
 
     if GameFunctions.box_count(grid) == count:
-        GameFunctions.vertical_check(grid)
+        GameFunctions.horizontal_check(grid, 1, 2)
     if GameFunctions.box_count(grid) == count:
-        GameFunctions.diagonal_check_left(grid)
+        GameFunctions.vertical_check(grid, 1, 2)
     if GameFunctions.box_count(grid) == count:
-        GameFunctions.diagonal_check_right(grid)
+        GameFunctions.diagonal_check_left(grid, 1, 2)
+    if GameFunctions.box_count(grid) == count:
+        GameFunctions.diagonal_check_right(grid, 1, 2)
+
     if GameFunctions.box_count(grid) == count:
         GameFunctions.random_move(grid)
+
+    if GameFunctions.win_check(grid, 2):
+        GameFunctions.view_grid(grid)
+        print("Player Lost!!!!")
+        break
+    if GameFunctions.win_check(grid, 1):
+        GameFunctions.view_grid(grid)
+        print("Player Wins!!!!!")
+        break
+
+    if GameFunctions.box_count(grid) == 9:
+        GameFunctions.view_grid(grid)
+        print("Game Tied!!!!!")
+        break
 
     GameFunctions.view_grid(grid)
