@@ -1,4 +1,4 @@
-# ------------------------------------------------------
+# -------------------------------------------------------
 
 # Vertical and horizontal checks [DONE]
 # Diagonal checks from left and right side [DONE]
@@ -7,9 +7,9 @@
 # Game over along with making the computer wanna win [DONE]
 # Improvement in the random function and
 # for the computer to make more strategic moves [DONE]
-# Convert the code to pycharm
+# Create a GUI
 
-# ------------------------------------------------------
+# --------------------------------------------------------
 
 
 import random
@@ -140,8 +140,8 @@ grid = [
 GameFunctions.view_grid(grid)
 
 while True:
-    u_grid = int(input("Grid??"))
-    u_index = int(input("Index??"))
+    u_grid = int(input("Grid?? PRESS(0 OR 1 OR 2)"))
+    u_index = int(input("Index?? PRESS(0 OR 1 OR 2)"))
     if grid[u_grid][u_index] == 0:
         grid[u_grid][u_index] = 1
     else:
