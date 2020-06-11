@@ -136,7 +136,7 @@ grid = [
     [0, 0, 0],
     [0, 0, 0]
 ]
-
+print("(1) is the player AND (2) is the computer")
 GameFunctions.view_grid(grid)
 
 while True:
